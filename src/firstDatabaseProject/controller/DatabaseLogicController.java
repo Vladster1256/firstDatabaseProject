@@ -1,6 +1,6 @@
 package firstDatabaseProject.controller;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -72,7 +72,7 @@ public class DatabaseLogicController
 		if(currentException instanceof SQLException)
 		{
 			JOptionPane.showMessageDialog(mainController.getAppFrame(), "SQL State:" + ((SQLException)currentException).getSQLState());
-			JOptionPane.showMessageDialog(mainController.getAppFrame(),"SQL Error Code:" + ((SQLException)currentException).getErrorCode());;;;;;;;;;;;;
+			JOptionPane.showMessageDialog(mainController.getAppFrame(),"SQL Error Code:" + ((SQLException)currentException).getErrorCode());
 		}
 	}
 	
@@ -89,5 +89,61 @@ public class DatabaseLogicController
 		{
 			displayErrors(error);
 		}
+	}
+	
+	/**
+	 * This queries the database SHOW TABLES and returns the results
+	 * @return results
+	 */
+	public String displayTables()
+	
+	{
+		String results = "";
+		String query = "SHOW DATABASES";
+		
+		/**
+		 * try the statement, get the answer, and for each answer keep going untill its out and close it.
+		 */
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answer = firstStatement.executeQuery(query);
+			while(answer.next())
+			{
+				results += answer.getString(1) + "\n";
+			}
+			answer.close();
+			firstStatement.close();
+		}
+		catch(SQLException currentSQLError)
+		{
+			displayErrors(currentSQLError);
+		}
+		
+		return results;
+	}
+	
+	public String describeTable()
+	{
+		String results = "";
+		String query = "DESCRIBE character_list";
+		
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answer = firstStatement.executeQuery(query);
+			while(answer.next())
+			{
+				results += answer.getString(1) + "\t" + "\t" + answer.getString(2) + "\t" +"\t" + answer.getString(3) + "\t" + answer.getString(4) + "\n";
+			}
+			answer.close();
+			firstStatement.close();
+		}
+		catch(SQLException currentSQLError)
+		{
+			displayErrors(currentSQLError);
+		}
+		
+		return results;
 	}
 }

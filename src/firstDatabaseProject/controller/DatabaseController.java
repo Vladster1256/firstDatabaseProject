@@ -42,4 +42,9 @@ public class DatabaseController
 	{
 		return appFrame;
 	}
+	
+	public DatabaseLogicController getDatabase()
+	{
+		return database;
+	}
 }
