@@ -84,8 +84,8 @@ public class DatabasePanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				String databaseAnswer = mainController.getDatabase().describeTable();
-				displayArea.setText(databaseAnswer);
+				int answer = mainController.getDatabase().insertSample();
+				displayArea.setText(displayArea.getText() + "\nRows Affected: " + answer);
 			}
 		});
 	}

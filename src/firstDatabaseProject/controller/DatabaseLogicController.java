@@ -123,6 +123,31 @@ public class DatabaseLogicController
 		return results;
 	}
 	
+	public int insertSample()
+	{
+		int rowsAffected = 0;
+		String insertQuery = "INSERT INTO `houses`.`my_houses` () Values ();";
+		
+		try
+		{
+			Statement insertStatement = databaseConnection.createStatement();
+			rowsAffected = insertStatement.executeUpdate(insertQuery);
+			insertStatement.close();
+			
+		}
+		catch(SQLException currentSQLError)
+		{
+			displayErrors(currentSQLError);
+		}
+		
+		
+		return rowsAffected;
+	}
+	
+	/**
+	 * This is the method that we use to describe the columns in the table, but not the data itself
+	 * @return it returns the string of the column headers of the table
+	 */
 	public String describeTable()
 	{
 		String results = "";
