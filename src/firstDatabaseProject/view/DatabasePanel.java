@@ -80,6 +80,9 @@ public class DatabasePanel extends JPanel
 	 */
 	private void setupListeners()
 	{
+		/**
+		 * we are getting the mainController, and inserting sampleMethod code. Which inserts stuffs into the database
+		 */
 		appButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent click)
