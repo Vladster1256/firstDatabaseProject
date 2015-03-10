@@ -7,8 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
+import javax.swing.table.DefaultTableModel;
 
 import firstDatabaseProject.controller.DatabaseController;
 
@@ -24,6 +26,7 @@ public class DatabasePanel extends JPanel
 	private JScrollPane displayPane;
 	private JButton appButton;
 	private JTextArea displayArea;
+	private JTable tableData;
 	
 	
 	/**
@@ -41,6 +44,7 @@ public class DatabasePanel extends JPanel
 		
 		
 		
+		setupTable();
 		setupDisplayPane();
 		 setupPanel();
 		 setupLayout();
@@ -73,6 +77,14 @@ public class DatabasePanel extends JPanel
 		baseLayout.putConstraint(SpringLayout.EAST, appButton, -149, SpringLayout.EAST, this);
 		baseLayout.putConstraint(SpringLayout.NORTH, displayPane, 29, SpringLayout.NORTH, this);
 		baseLayout.putConstraint(SpringLayout.EAST, displayPane, -91, SpringLayout.EAST, this);
+	}
+	
+	private void setupTable()
+	//One d array for column titles
+	//2d array for contents
+	{
+		tableData = new JTable(new DefaultTableModel(mainController.getDatabase().tableInfo(), mainController.getDatabase().getMetaData()));
+		displayPane = new JScrollPane(tableData);
 	}
 	
 	/**
