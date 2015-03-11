@@ -156,7 +156,7 @@ public class DatabaseLogicController
 			firstStatement.close();
 		} catch (SQLException currentSQLError)
 		{
-			results = new String[][] { { "problem occured :((((((((((((((" } };
+			results = new String[][] { { "problem occured :(((((((" } };
 			displayErrors(currentSQLError);
 
 		}
