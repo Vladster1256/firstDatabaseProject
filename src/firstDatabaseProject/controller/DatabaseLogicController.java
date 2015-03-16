@@ -16,6 +16,7 @@ public class DatabaseLogicController
 	private String connectionString;
 	private Connection databaseConnection;
 	private DatabaseController mainController;
+	private String currentQuery;
 
 	/**
 	 * this is our constructor for this class
@@ -99,6 +100,61 @@ public class DatabaseLogicController
 		}
 	}
 
+	private boolean checkForDataViolation()
+	{
+		if (currentQuery.toUpperCase().contains(" DROP ") || currentQuery.toUpperCase().contains(" TRUNCATE ") || currentQuery.toUpperCase().contains(" SET ") || currentQuery.toUpperCase().contains(" ALTER "))
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Generic select based query for the databaseLogicController Checks that
+	 * the query will not destroy data by calling the checkForDataViolation
+	 * method in the try catch
+	 * 
+	 * @param query
+	 *            the query to be executed on the database it will be set at the
+	 *            currentQuery for the controller
+	 * @return the 2d array of results
+	 */
+	public String[][] selectQueryResults(String query)
+	{
+		this.currentQuery = query;
+		String[][] results;
+
+		try
+		{
+			if (checkForDataViolation())
+			{
+				throw new SQLException("Attempted illegal modification of data", ":( tried to mess up da data state :0", Integer.MIN_VALUE);
+			}
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answer = firstStatement.executeQuery(query);
+			int columnCount = answer.getMetaData().getColumnCount();
+
+			answer.last();
+			int rowCount = answer.getRow();
+			answer.beforeFirst();
+			results = new String[rowCount][columnCount];
+			while (answer.next())
+			{
+				for (int col = 0; col < columnCount; col++)
+				{
+					results[answer.getRow() - 1][col] = answer.getString(col + 1);
+				}
+			}
+		} catch (SQLException currentSQLError)
+		{
+			results = new String[][] { { "error procressing query" }, { "try sending a better query" }, { currentSQLError.getMessage() } };
+			displayErrors(currentSQLError);
+		}
+		return results;
+	}
+
 	/**
 	 * This queries the database SHOW TABLES and returns the results
 	 * 
@@ -163,31 +219,29 @@ public class DatabaseLogicController
 
 		return results;
 	}
-	
-	public String [] getMetaData()
+
+	public String[] getMetaData()
 	{
-		String [] columnInformation;
+		String[] columnInformation;
 		String query = "SHOW TABLES";
-		
-		
+
 		try
 		{
 			Statement firstStatement = databaseConnection.createStatement();
 			ResultSet answer = firstStatement.executeQuery(query);
 			ResultSetMetaData myMeta = answer.getMetaData();
-			
-			columnInformation = new String [myMeta.getColumnCount()];
-			for(int spot = 0; spot < myMeta.getColumnCount(); spot ++)
+
+			columnInformation = new String[myMeta.getColumnCount()];
+			for (int spot = 0; spot < myMeta.getColumnCount(); spot++)
 			{
 				columnInformation[spot] = myMeta.getColumnName(spot + 1);
 			}
-			
+
 			answer.close();
 			firstStatement.close();
-		}
-		catch(SQLException currentSQLError)
+		} catch (SQLException currentSQLError)
 		{
-			columnInformation = new String [] {"nada exists"};
+			columnInformation = new String[] { "nada exists" };
 			displayErrors(currentSQLError);
 		}
 		return columnInformation;
@@ -238,6 +292,37 @@ public class DatabaseLogicController
 			displayErrors(currentSQLError);
 		}
 
+		return results;
+	}
+
+	public String[][] realResults()
+	{
+		String[][] results;
+		String query = "SELECT * FROM `INNODB_SYS_COLUMNS";
+
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answers = firstStatement.executeQuery(query);
+			int columnCount = answers.getMetaData().getColumnCount();
+
+			answers.last();
+			int numberOfRows = answers.getRow();
+
+			results = new String[numberOfRows][columnCount];
+
+			while (answers.next())
+			{
+				for (int col = 0; col < columnCount; col++)
+				{
+					results[answers.getRow() - 1][col] = answers.getString(col + 1);
+				}
+			}
+		} catch (SQLException currentSQLError)
+		{
+			results = new String[][] { { "error processing" } };
+			displayErrors(currentSQLError);
+		}
 		return results;
 	}
 }
