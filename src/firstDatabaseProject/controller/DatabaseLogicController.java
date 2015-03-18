@@ -36,8 +36,8 @@ public class DatabaseLogicController
 	 * This is the method that we use to change the connectionString with all of the different parameters that the user needs to use
 	 * @param pathToDBServer its the path to the Server
 	 * @param databaseName its the database name
-	 * @param userName 
-	 * @param password
+	 * @param userName the user name of the database
+	 * @param password password for the user
 	 */
 	public void connectionStringBuilder(String pathToDBServer, String databaseName, String userName, String password)
 	{
@@ -115,6 +115,10 @@ public class DatabaseLogicController
 		}
 	}
 
+	/**
+	 * This checks if the query contains DROP, TRUNCATE, SET, OR ALTER in a query statement
+	 * @return true or false
+	 */
 	private boolean checkForDataViolation()
 	{
 		if (currentQuery.toUpperCase().contains(" DROP ") || currentQuery.toUpperCase().contains(" TRUNCATE ") || currentQuery.toUpperCase().contains(" SET ") || currentQuery.toUpperCase().contains(" ALTER "))
@@ -203,6 +207,10 @@ public class DatabaseLogicController
 		return results;
 	}
 
+	/**
+	 * this gets the table info and converts the 1d array to a 2d array with a width of 1 and a length of the length of the tables.
+	 * @return the 2d array results
+	 */
 	public String[][] tableInfo()
 	{
 		String[][] results;
@@ -235,6 +243,10 @@ public class DatabaseLogicController
 		return results;
 	}
 
+	/**
+	 * this gets the metaData of the tables in the database
+	 * @return
+	 */
 	public String[] getMetaData()
 	{
 		String[] columnInformation;
@@ -262,6 +274,10 @@ public class DatabaseLogicController
 		return columnInformation;
 	}
 
+	/**
+	 * This inserts data into the database
+	 * @return the number of rowsAffected
+	 */
 	public int insertSample()
 	{
 		int rowsAffected = 0;
@@ -310,6 +326,10 @@ public class DatabaseLogicController
 		return results;
 	}
 
+	/**
+	 * gets results from the sys_columns
+	 * @return the 2d array results and 
+	 */
 	public String[][] realResults()
 	{
 		String[][] results;

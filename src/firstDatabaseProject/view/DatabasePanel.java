@@ -56,6 +56,9 @@ public class DatabasePanel extends JPanel
 
 	}
 
+	/**
+	 * This is what we use to setup the diplay pane
+	 */
 	private void setupDisplayPane()
 	{
 
@@ -88,6 +91,9 @@ public class DatabasePanel extends JPanel
 		baseLayout.putConstraint(SpringLayout.EAST, displayPane, -91, SpringLayout.EAST, this);
 	}
 
+	/**
+	 * This is what we use to setup the view so it looks like a table and its all organized nice
+	 */
 	private void setupTable()
 	// One d array for column titles
 	// 2d array for contents

@@ -47,6 +47,10 @@ public class DatabaseController
 		return appFrame;
 	}
 	
+	/**
+	 * This gets the $database
+	 * @return $database
+	 */
 	public DatabaseLogicController getDatabase()
 	{
 		return $database;
