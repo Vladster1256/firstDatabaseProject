@@ -13,7 +13,7 @@ public class DatabaseController
 {
 	private DatabaseView applicationView;
 	private DatabaseFrame appFrame;
-	private DatabaseLogicController database;
+	private DatabaseLogicController $database;
 
 	/**
 	 * this is the constructor for the DatabaseController class
@@ -21,7 +21,7 @@ public class DatabaseController
 	public DatabaseController()
 	{
 		//Initialize the DatabaseLogicController object that we can open and use
-		database = new DatabaseLogicController(this);
+		$database = new DatabaseLogicController(this);
 		//Initialize the DatabaseFrame object that we can open and see the GUI
 		appFrame = new DatabaseFrame(this);
 	}
@@ -31,6 +31,10 @@ public class DatabaseController
 	 */
 	public void start()
 	{
+		$database.connectionStringBuilder("localhost", "vlad's_database_of_smash", "root", "");
+		$database.checkDriver();
+		$database.setupConnection();
+		
 		
 	}
 	
@@ -45,6 +49,6 @@ public class DatabaseController
 	
 	public DatabaseLogicController getDatabase()
 	{
-		return database;
+		return $database;
 	}
 }

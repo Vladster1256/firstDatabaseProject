@@ -26,17 +26,32 @@ public class DatabaseLogicController
 	 */
 	public DatabaseLogicController(DatabaseController mainController)
 	{
-		connectionString = "jdbc:mysql://localhost/vlad's_database_of_smash?user=root";
 		this.mainController = mainController;
 
 		checkDriver();
 		setupConnection();
 	}
+	
+	/**
+	 * This is the method that we use to change the connectionString with all of the different parameters that the user needs to use
+	 * @param pathToDBServer its the path to the Server
+	 * @param databaseName its the database name
+	 * @param userName 
+	 * @param password
+	 */
+	public void connectionStringBuilder(String pathToDBServer, String databaseName, String userName, String password)
+	{
+		connectionString = "jdbc:mysql://";
+		connectionString += pathToDBServer;
+		connectionString+= "/" + databaseName;
+		connectionString+="?user=" + userName;
+		connectionString+="&password=" +password;
+	}
 
 	/**
 	 * this checks our driver for the database
 	 */
-	private void checkDriver()
+	public void checkDriver()
 	{
 		try
 		{
@@ -52,7 +67,7 @@ public class DatabaseLogicController
 	/**
 	 * this is what we use to establish the connection to the database
 	 */
-	private void setupConnection()
+	public void setupConnection()
 	{
 		try
 		{
