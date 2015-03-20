@@ -1,10 +1,12 @@
 package firstDatabaseProject.controller;
 
 import java.sql.*;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
+import javax.security.sasl.SaslException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
+
 
 /**
  * @version 1.0
@@ -27,25 +29,32 @@ public class DatabaseLogicController
 	public DatabaseLogicController(DatabaseController mainController)
 	{
 		this.mainController = mainController;
+		connectionString = "jdbc:mysql://localhost/vlad's_database_of_smash?user=root";
 
 		checkDriver();
 		setupConnection();
 	}
-	
+
 	/**
-	 * This is the method that we use to change the connectionString with all of the different parameters that the user needs to use
-	 * @param pathToDBServer its the path to the Server
-	 * @param databaseName its the database name
-	 * @param userName the user name of the database
-	 * @param password password for the user
+	 * This is the method that we use to change the connectionString with all of
+	 * the different parameters that the user needs to use
+	 * 
+	 * @param pathToDBServer
+	 *            its the path to the Server
+	 * @param databaseName
+	 *            its the database name
+	 * @param userName
+	 *            the user name of the database
+	 * @param password
+	 *            password for the user
 	 */
 	public void connectionStringBuilder(String pathToDBServer, String databaseName, String userName, String password)
 	{
 		connectionString = "jdbc:mysql://";
 		connectionString += pathToDBServer;
-		connectionString+= "/" + databaseName;
-		connectionString+="?user=" + userName;
-		connectionString+="&password=" +password;
+		connectionString += "/" + databaseName;
+		connectionString += "?user=" + userName;
+		connectionString += "&password=" + password;
 	}
 
 	/**
@@ -89,11 +98,6 @@ public class DatabaseLogicController
 	public void displayErrors(Exception currentException)
 	{
 		JOptionPane.showMessageDialog(mainController.getAppFrame(), currentException.getMessage());
-		;
-		;
-		;
-		;
-		;
 		if (currentException instanceof SQLException)
 		{
 			JOptionPane.showMessageDialog(mainController.getAppFrame(), "SQL State:" + ((SQLException) currentException).getSQLState());
@@ -116,7 +120,9 @@ public class DatabaseLogicController
 	}
 
 	/**
-	 * This checks if the query contains DROP, TRUNCATE, SET, OR ALTER in a query statement
+	 * This checks if the query contains DROP, TRUNCATE, SET, OR ALTER in a
+	 * query statement
+	 * 
 	 * @return true or false
 	 */
 	private boolean checkForDataViolation()
@@ -131,6 +137,86 @@ public class DatabaseLogicController
 	}
 
 	/**
+	 * checks if the query contains DATABASE so we cannot modify or drop
+	 * database
+	 * 
+	 * @return true or false depending if the condition is true or not
+	 */
+	private boolean checkForStructureViolation()
+	{
+		if (currentQuery.toUpperCase().contains(" DATABASE "))
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
+	}
+
+	private boolean checkForCreation()
+	{
+		if (currentQuery.toUpperCase().contains(" CREATE "))
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
+	}
+
+	public void createThingy()
+	{
+		String results;
+
+		if (checkForCreation())
+		{
+			final ImageIcon icon = new ImageIcon(DatabaseLogicController.class.getResource("/firstDatabaseProject/images/clippy.jpg"));
+			String[] buttons = new String[] { "Yes Sirrie!!", "Na m8" };
+			JOptionPane.showOptionDialog(null, null ,"I See that you are trying to CREATE something, would you like help with that?" , JOptionPane.WARNING_MESSAGE, 0, icon, buttons, buttons[1]);
+
+		}
+
+	}
+
+	/**
+	 * This will allow us to drop the table or indexes, but not the database,
+	 * throws an exception if a drop of DB is attempted m8.
+	 */
+	public void dropStatement()
+	{
+		String results;
+		try
+		{
+			if (checkForStructureViolation())
+			{
+				throw new SQLException("you is no allowed to dropping db's", "duh", Integer.MIN_VALUE);
+			}
+
+			if (currentQuery.toUpperCase().contains(" INDEX "))
+			{
+				results = "The index was ";
+			} else
+			{
+				results = "The table was ";
+			}
+
+			Statement dropStatement = databaseConnection.createStatement();
+			int affected = dropStatement.executeUpdate(currentQuery);
+
+			dropStatement.close();
+
+			if (affected == 0)
+			{
+				results += "dropped";
+			}
+			JOptionPane.showMessageDialog(mainController.getAppFrame(), results);
+		} catch (SQLException dropError)
+		{
+			displayErrors(dropError);
+		}
+	}
+
+	/**
 	 * Generic select based query for the databaseLogicController Checks that
 	 * the query will not destroy data by calling the checkForDataViolation
 	 * method in the try catch
@@ -138,6 +224,9 @@ public class DatabaseLogicController
 	 * @param query
 	 *            the query to be executed on the database it will be set at the
 	 *            currentQuery for the controller
+	 * @throws SQLExeption
+	 *             if the currentQuery contains DDl statements that would affect
+	 *             the structure/contents of the database. :\
 	 * @return the 2d array of results
 	 */
 	public String[][] selectQueryResults(String query)
@@ -208,7 +297,9 @@ public class DatabaseLogicController
 	}
 
 	/**
-	 * this gets the table info and converts the 1d array to a 2d array with a width of 1 and a length of the length of the tables.
+	 * this gets the table info and converts the 1d array to a 2d array with a
+	 * width of 1 and a length of the length of the tables.
+	 * 
 	 * @return the 2d array results
 	 */
 	public String[][] tableInfo()
@@ -245,6 +336,7 @@ public class DatabaseLogicController
 
 	/**
 	 * this gets the metaData of the tables in the database
+	 * 
 	 * @return
 	 */
 	public String[] getMetaData()
@@ -276,12 +368,13 @@ public class DatabaseLogicController
 
 	/**
 	 * This inserts data into the database
+	 * 
 	 * @return the number of rowsAffected
 	 */
 	public int insertSample()
 	{
 		int rowsAffected = 0;
-		String insertQuery = "INSERT INTO `houses`.`my_houses` () Values ();";
+		String insertQuery = "CREATE TABLE `Stewie's_fave's` (id int(20));";
 
 		try
 		{
@@ -328,7 +421,8 @@ public class DatabaseLogicController
 
 	/**
 	 * gets results from the sys_columns
-	 * @return the 2d array results and 
+	 * 
+	 * @return the 2d array results and
 	 */
 	public String[][] realResults()
 	{

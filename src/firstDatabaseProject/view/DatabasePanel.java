@@ -47,6 +47,7 @@ public class DatabasePanel extends JPanel
 		displayPane = new JScrollPane(displayArea);
 		baseLayout = new SpringLayout();
 		password = new JPasswordField(null, 20);
+	
 
 		setupTable();
 		setupDisplayPane();
@@ -89,6 +90,7 @@ public class DatabasePanel extends JPanel
 		baseLayout.putConstraint(SpringLayout.EAST, appButton, -149, SpringLayout.EAST, this);
 		baseLayout.putConstraint(SpringLayout.NORTH, displayPane, 29, SpringLayout.NORTH, this);
 		baseLayout.putConstraint(SpringLayout.EAST, displayPane, -91, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.NORTH, password, 371, SpringLayout.NORTH, this);
 	}
 
 	/**
@@ -100,6 +102,7 @@ public class DatabasePanel extends JPanel
 	{
 		tableData = new JTable(new DefaultTableModel(mainController.getDatabase().tableInfo(), mainController.getDatabase().getMetaData()));
 		displayPane = new JScrollPane(tableData);
+		baseLayout.putConstraint(SpringLayout.EAST, password, -24, SpringLayout.WEST, displayPane);
 	}
 
 	/**
