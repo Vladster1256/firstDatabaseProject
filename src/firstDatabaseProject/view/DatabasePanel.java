@@ -31,6 +31,7 @@ public class DatabasePanel extends JPanel
 	private JTextArea displayArea;
 	private JTable tableData;
 	private JPasswordField password;
+	private TableCellWrapRenderer cellRenderer;
 
 	/**
 	 * this is the constructor for the DatabasePanel class
@@ -47,6 +48,7 @@ public class DatabasePanel extends JPanel
 		displayPane = new JScrollPane(displayArea);
 		baseLayout = new SpringLayout();
 		password = new JPasswordField(null, 20);
+		cellRenderer = new TableCellWrapRenderer();
 	
 
 		setupTable();
@@ -91,6 +93,7 @@ public class DatabasePanel extends JPanel
 		baseLayout.putConstraint(SpringLayout.NORTH, displayPane, 29, SpringLayout.NORTH, this);
 		baseLayout.putConstraint(SpringLayout.EAST, displayPane, -91, SpringLayout.EAST, this);
 		baseLayout.putConstraint(SpringLayout.NORTH, password, 371, SpringLayout.NORTH, this);
+		baseLayout.putConstraint(SpringLayout.EAST, password, -24, SpringLayout.WEST, displayPane);
 	}
 
 	/**
@@ -102,7 +105,10 @@ public class DatabasePanel extends JPanel
 	{
 		tableData = new JTable(new DefaultTableModel(mainController.getDatabase().tableInfo(), mainController.getDatabase().getMetaData()));
 		displayPane = new JScrollPane(tableData);
-		baseLayout.putConstraint(SpringLayout.EAST, password, -24, SpringLayout.WEST, displayPane);
+		for(int spot = 0; spot<tableData.getColumnCount();spot++)
+		{
+			tableData.getColumnModel().getColumn(spot).setCellRenderer(cellRenderer);
+		}
 	}
 
 	/**

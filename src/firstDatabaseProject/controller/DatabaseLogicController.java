@@ -155,7 +155,7 @@ public class DatabaseLogicController
 
 	private boolean checkForCreation()
 	{
-		if (currentQuery.toUpperCase().contains(" CREATE "))
+		if (currentQuery.toUpperCase().contains("CREATE"))
 		{
 			return true;
 		} else
