@@ -1,5 +1,8 @@
 package firstDatabaseProject.controller;
 
+import java.util.ArrayList;
+
+import firstDatabaseProject.model.QueryInfo;
 import firstDatabaseProject.view.DatabaseFrame;
 import firstDatabaseProject.view.DatabasePanel;
 import firstDatabaseProject.view.DatabaseView;
@@ -14,6 +17,7 @@ public class DatabaseController
 	private DatabaseView applicationView;
 	private DatabaseFrame appFrame;
 	private DatabaseLogicController $database;
+	private ArrayList<QueryInfo> timingInfoList;
 
 	/**
 	 * this is the constructor for the DatabaseController class
@@ -54,5 +58,10 @@ public class DatabaseController
 	public DatabaseLogicController getDatabase()
 	{
 		return $database;
+	}
+	
+	public ArrayList<QueryInfo> getTimingInfoList()
+	{
+		return timingInfoList;
 	}
 }

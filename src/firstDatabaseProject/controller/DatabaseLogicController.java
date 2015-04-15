@@ -29,7 +29,7 @@ public class DatabaseLogicController
 	public DatabaseLogicController(DatabaseController mainController)
 	{
 		this.mainController = mainController;
-		connectionString = "jdbc:mysql://localhost/vlad's_database_of_smash?user=root";
+		connectionString = "jdbc:mysql://10.228.5.160/book_reading?user=v.garder&password=gard124";
 
 		checkDriver();
 		setupConnection();
