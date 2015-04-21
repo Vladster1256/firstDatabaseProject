@@ -6,7 +6,7 @@ import javax.security.sasl.SaslException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-
+import firstDatabaseProject.model.QueryInfo;
 
 /**
  * @version 1.0
@@ -153,6 +153,10 @@ public class DatabaseLogicController
 		}
 	}
 
+	/**
+	 * This checks for creation of content
+	 * @return true or false
+	 */
 	private boolean checkForCreation()
 	{
 		if (currentQuery.toUpperCase().contains("CREATE"))
@@ -164,6 +168,9 @@ public class DatabaseLogicController
 		}
 	}
 
+	/**
+	 * This creates a dialog with clippy image to ask if you want to create something
+	 */
 	public void createThingy()
 	{
 		String results;
@@ -172,7 +179,7 @@ public class DatabaseLogicController
 		{
 			final ImageIcon icon = new ImageIcon(DatabaseLogicController.class.getResource("/firstDatabaseProject/images/clippy.jpg"));
 			String[] buttons = new String[] { "Yes Sirrie!!", "Na m8" };
-			JOptionPane.showOptionDialog(null, null ,"I See that you are trying to CREATE something, would you like help with that?" , JOptionPane.WARNING_MESSAGE, 0, icon, buttons, buttons[1]);
+			JOptionPane.showOptionDialog(null, null, "I See that you are trying to CREATE something, would you like help with that?", JOptionPane.WARNING_MESSAGE, 0, icon, buttons, buttons[1]);
 
 		}
 
@@ -453,5 +460,45 @@ public class DatabaseLogicController
 			displayErrors(currentSQLError);
 		}
 		return results;
+	}
+
+	
+	/**
+	 * This is part of the dynamic buttons and columns for the database that returns the string array for table name
+	 * @param tableName the string for the table name
+	 * @return the string array columns
+	 */
+	public String[] getDatabaseColumnNames(String tableName)
+	{
+		String[] columns;
+		currentQuery = "SELECT * FROM `" + tableName + "`";
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
+		try
+		{
+			Statement firstStatement = databaseConnection.createStatement();
+			ResultSet answers = firstStatement.executeQuery(currentQuery);
+			ResultSetMetaData answerData = answers.getMetaData();
+
+			columns = new String[answerData.getColumnCount()];
+
+			for (int column = 0; column < answerData.getColumnCount(); column++)
+			{
+				columns[column] = answerData.getColumnName(column++);
+			}
+			
+			answers.close();
+			firstStatement.close();
+			endTime = System.currentTimeMillis();
+
+		} catch (SQLException currentException)
+		{
+			endTime = System.currentTimeMillis();
+			columns = new String [] {"empty"};
+			displayErrors(currentException);
+		}
+		long queryTime = endTime - startTime;
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery, queryTime));
+		return columns;
 	}
 }

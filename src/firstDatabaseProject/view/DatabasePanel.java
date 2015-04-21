@@ -144,6 +144,9 @@ public class DatabasePanel extends JPanel
 			}
 		});
 
+		/**
+		 * This creates the confirm date to prove when date on the query has been created
+		 */
 		confirmDateButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent click)
