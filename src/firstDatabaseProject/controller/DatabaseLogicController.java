@@ -270,6 +270,7 @@ public class DatabaseLogicController
 			results = new String[][] { { "error procressing query" }, { "try sending a better query" }, { currentSQLError.getMessage() } };
 			displayErrors(currentSQLError);
 		}
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
 	}
 
@@ -302,6 +303,7 @@ public class DatabaseLogicController
 		{
 			displayErrors(currentSQLError);
 		}
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 
 		return results;
 	}
@@ -341,6 +343,7 @@ public class DatabaseLogicController
 
 		}
 
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
 	}
 
@@ -397,6 +400,7 @@ public class DatabaseLogicController
 			displayErrors(currentSQLError);
 		}
 
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return rowsAffected;
 	}
 
@@ -426,6 +430,7 @@ public class DatabaseLogicController
 			displayErrors(currentSQLError);
 		}
 
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
 	}
 
@@ -462,6 +467,7 @@ public class DatabaseLogicController
 			results = new String[][] { { "error processing" } };
 			displayErrors(currentSQLError);
 		}
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
 	}
 
