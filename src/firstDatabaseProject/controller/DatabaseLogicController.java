@@ -6,6 +6,7 @@ import javax.security.sasl.SaslException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import firstDatabaseProject.exception.Vlad;
 import firstDatabaseProject.model.QueryInfo;
 
 /**
@@ -155,6 +156,7 @@ public class DatabaseLogicController
 
 	/**
 	 * This checks for creation of content
+	 * 
 	 * @return true or false
 	 */
 	private boolean checkForCreation()
@@ -169,7 +171,8 @@ public class DatabaseLogicController
 	}
 
 	/**
-	 * This creates a dialog with clippy image to ask if you want to create something
+	 * This creates a dialog with clippy image to ask if you want to create
+	 * something
 	 */
 	public void createThingy()
 	{
@@ -462,10 +465,37 @@ public class DatabaseLogicController
 		return results;
 	}
 
-	
+	public void submitQuery(String currentQuery) throws Vlad
+	{
+		this.currentQuery = currentQuery;
+		long startTime, endTime = 0;
+		startTime = System.currentTimeMillis();
+		if (!checkForDataViolation())
+		{
+
+			try
+			{
+				Statement submitStatement = databaseConnection.createStatement();
+				submitStatement.executeUpdate(currentQuery);
+				submitStatement.close();
+				endTime = System.currentTimeMillis();
+			} catch (SQLException currentError)
+			{
+				endTime = System.currentTimeMillis();
+				throw new Vlad(currentError);
+			}
+			
+		}
+		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
+
+	}
+
 	/**
-	 * This is part of the dynamic buttons and columns for the database that returns the string array for table name
-	 * @param tableName the string for the table name
+	 * This is part of the dynamic buttons and columns for the database that
+	 * returns the string array for table name
+	 * 
+	 * @param tableName
+	 *            the string for the table name
 	 * @return the string array columns
 	 */
 	public String[] getDatabaseColumnNames(String tableName)
@@ -486,7 +516,7 @@ public class DatabaseLogicController
 			{
 				columns[column] = answerData.getColumnName(column++);
 			}
-			
+
 			answers.close();
 			firstStatement.close();
 			endTime = System.currentTimeMillis();
@@ -494,7 +524,7 @@ public class DatabaseLogicController
 		} catch (SQLException currentException)
 		{
 			endTime = System.currentTimeMillis();
-			columns = new String [] {"empty"};
+			columns = new String[] { "empty" };
 			displayErrors(currentException);
 		}
 		long queryTime = endTime - startTime;

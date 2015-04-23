@@ -20,6 +20,7 @@ import javax.swing.SpringLayout;
 import javax.swing.table.DefaultTableModel;
 
 import firstDatabaseProject.controller.DatabaseController;
+import firstDatabaseProject.exception.Vlad;
 
 /**
  * this is the panel class for the GUI that we can sea with our i's. (W0W m8,
@@ -93,18 +94,47 @@ public class DynamicDataPanel extends JPanel
 	{
 		baseLayout.putConstraint(SpringLayout.SOUTH, submitQueryButton, -50, SpringLayout.SOUTH, this);
 	}
-	
+
 	private String getValueList()
 	{
 		String values = "";
-		
+		// needs the format (`field`, `field`, `field`, ...)
+
+		for (int spot = 0; spot < inputFieldList.size(); spot++)
+		{
+			String temp = inputFieldList.get(spot).getText();
+
+			if (spot == inputFieldList.size() - 1)
+			{
+				values += "'" + temp + "') ";
+			} else
+			{
+				values += "'" + temp + "', ";
+			}
+		}
 		return values;
 	}
-	
+
 	private String getFieldList()
 	{
-		String fields = "";
-		
+		String fields = "(";
+
+		for (int spot = 0; spot < inputFieldList.size(); spot++)
+		{
+			String temp = inputFieldList.get(spot).getName();
+			int cutoff = temp.indexOf("Field");
+			temp = temp.substring(0, cutoff);
+
+			if (spot == inputFieldList.size() - 1)
+			{
+				fields += "`" + temp + "`) ";
+			} else
+			{
+				fields += "`" + temp + "`, ";
+			}
+
+		}
+
 		return fields;
 	}
 
@@ -132,6 +162,22 @@ public class DynamicDataPanel extends JPanel
 				fieldCount--;
 			}
 		}
-
+	
+		submitQueryButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				String query = "INSERT INTO " + tableName + " " + getFieldList() + " VALUES " + getValueList() + ";";
+				try
+				{
+					mainController.getDatabase().submitQuery(query);
+				} catch (Vlad e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 }

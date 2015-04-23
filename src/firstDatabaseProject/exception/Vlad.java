@@ -1,9 +1,11 @@
 package firstDatabaseProject.exception;
 
+import java.sql.SQLException;
+
 public class Vlad extends Exception
 {
-	public Vlad(String message)
+	public Vlad(SQLException currentError)
 	{
-		super(message);
+		super(currentError);
 	}
 }
