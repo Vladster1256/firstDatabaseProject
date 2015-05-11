@@ -1,5 +1,7 @@
 package firstDatabaseProject.controller;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.sql.*;
 
 import javax.security.sasl.SaslException;
@@ -30,7 +32,7 @@ public class DatabaseLogicController
 	public DatabaseLogicController(DatabaseController mainController)
 	{
 		this.mainController = mainController;
-		connectionString = "jdbc:mysql://10.228.5.160/book_reading?user=v.garder&password=gard124";
+		connectionString = "jdbc:mysql://localhost/vlad's_database_of_smash?user=root";
 
 		checkDriver();
 		setupConnection();
@@ -355,7 +357,7 @@ public class DatabaseLogicController
 
 		}
 
-		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
+//		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
 	}
 
@@ -495,6 +497,11 @@ public class DatabaseLogicController
 		return results;
 	}
 
+	/**
+	 * This is what we use to submit a Query
+	 * @param currentQuery is the Query we pass it
+	 * @throws Vlad when an exception is met
+	 */
 	public void submitQuery(String currentQuery) throws Vlad
 	{
 		this.currentQuery = currentQuery;
@@ -560,5 +567,22 @@ public class DatabaseLogicController
 		long queryTime = endTime - startTime;
 		mainController.getTimingInfoList().add(new QueryInfo(currentQuery, queryTime));
 		return columns;
+	}
+	
+	public void saveTimingInformation()
+	{
+		try
+		{
+			File saveFile = new File("asdfasdf.save");
+			PrintWriter writer = new PrintWriter(saveFile);
+			if(saveFile.exists())
+			{
+				
+			}
+		}
+		catch()
+		{
+			
+		}
 	}
 }
