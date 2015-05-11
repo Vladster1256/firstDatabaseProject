@@ -243,6 +243,8 @@ public class DatabaseLogicController
 	{
 		this.currentQuery = query;
 		String[][] results;
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 
 		try
 		{
@@ -265,10 +267,12 @@ public class DatabaseLogicController
 					results[answer.getRow() - 1][col] = answer.getString(col + 1);
 				}
 			}
+			endTime = System.currentTimeMillis();
 		} catch (SQLException currentSQLError)
 		{
 			results = new String[][] { { "error procressing query" }, { "try sending a better query" }, { currentSQLError.getMessage() } };
 			displayErrors(currentSQLError);
+			endTime = System.currentTimeMillis();
 		}
 		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
@@ -284,6 +288,8 @@ public class DatabaseLogicController
 	{
 		String results = "";
 		String query = "SHOW TABLES";
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 
 		/**
 		 * try the statement, get the answer, and for each answer keep going
@@ -299,9 +305,11 @@ public class DatabaseLogicController
 			}
 			answer.close();
 			firstStatement.close();
+			endTime = System.currentTimeMillis();
 		} catch (SQLException currentSQLError)
 		{
 			displayErrors(currentSQLError);
+			endTime = System.currentTimeMillis();
 		}
 		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 
@@ -318,6 +326,8 @@ public class DatabaseLogicController
 	{
 		String[][] results;
 		String query = "SHOW TABLES";
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 
 		try
 		{
@@ -336,10 +346,12 @@ public class DatabaseLogicController
 
 			answer.close();
 			firstStatement.close();
+			endTime = System.currentTimeMillis();
 		} catch (SQLException currentSQLError)
 		{
 			results = new String[][] { { "problem occured :(((((((" } };
 			displayErrors(currentSQLError);
+			endTime = System.currentTimeMillis();
 
 		}
 
@@ -388,16 +400,20 @@ public class DatabaseLogicController
 	{
 		int rowsAffected = 0;
 		String insertQuery = "CREATE TABLE `Stewie's_fave's` (id int(20));";
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 
 		try
 		{
 			Statement insertStatement = databaseConnection.createStatement();
 			rowsAffected = insertStatement.executeUpdate(insertQuery);
 			insertStatement.close();
+			endTime = System.currentTimeMillis();
 
 		} catch (SQLException currentSQLError)
 		{
 			displayErrors(currentSQLError);
+			endTime = System.currentTimeMillis();
 		}
 
 		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
@@ -414,6 +430,8 @@ public class DatabaseLogicController
 	{
 		String results = "";
 		String query = "DESCRIBE character_list";
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 
 		try
 		{
@@ -425,9 +443,11 @@ public class DatabaseLogicController
 			}
 			answer.close();
 			firstStatement.close();
+			endTime = System.currentTimeMillis();
 		} catch (SQLException currentSQLError)
 		{
 			displayErrors(currentSQLError);
+			endTime = System.currentTimeMillis();
 		}
 
 		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
@@ -443,6 +463,8 @@ public class DatabaseLogicController
 	{
 		String[][] results;
 		String query = "SELECT * FROM `INNODB_SYS_COLUMNS";
+		long startTime, endTime;
+		startTime = System.currentTimeMillis();
 
 		try
 		{
@@ -462,10 +484,12 @@ public class DatabaseLogicController
 					results[answers.getRow() - 1][col] = answers.getString(col + 1);
 				}
 			}
+			endTime = System.currentTimeMillis();
 		} catch (SQLException currentSQLError)
 		{
 			results = new String[][] { { "error processing" } };
 			displayErrors(currentSQLError);
+			endTime = System.currentTimeMillis();
 		}
 		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 		return results;
