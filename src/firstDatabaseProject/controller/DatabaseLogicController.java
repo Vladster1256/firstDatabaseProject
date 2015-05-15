@@ -1,12 +1,15 @@
 package firstDatabaseProject.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.Scanner;
 
 import javax.security.sasl.SaslException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 import firstDatabaseProject.exception.Vlad;
 import firstDatabaseProject.model.QueryInfo;
@@ -513,7 +516,7 @@ public class DatabaseLogicController
 			try
 			{
 				Statement submitStatement = databaseConnection.createStatement();
-				submitStatement.executeUpdate(currentQuery);
+				submitStatement.executeQuery(currentQuery);
 				submitStatement.close();
 				endTime = System.currentTimeMillis();
 			} catch (SQLException currentError)
@@ -523,7 +526,7 @@ public class DatabaseLogicController
 			}
 			
 		}
-		mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
+		//mainController.getTimingInfoList().add(new QueryInfo(currentQuery,endTime-startTime));
 
 	}
 
@@ -569,20 +572,46 @@ public class DatabaseLogicController
 		return columns;
 	}
 	
-	public void saveTimingInformation()
-	{
-		try
-		{
-			File saveFile = new File("asdfasdf.save");
-			PrintWriter writer = new PrintWriter(saveFile);
-			if(saveFile.exists())
-			{
-				
-			}
-		}
-		catch()
-		{
-			
-		}
-	}
+//	public void saveTimingInformation()
+//	{
+//		try
+//		{
+//			File saveFile = new File("asdfasdf.save");
+//			PrintWriter writer = new PrintWriter(saveFile);
+//			if(saveFile.exists())
+//			{
+//				
+//			}
+//		}
+//		catch()
+//		{
+//			
+//		}
+//	}
+//	
+//	private void loadTimingInformation()
+//	{
+//		try
+//		{
+//			File loadFile = new File("asdasda.save");
+//			if(loadFile.exists())
+//			{
+//				queryList.clear();
+//				Scanner textScanner = new Scanner(loadFile);
+//				while(textScanner.hasNext())
+//				{
+//					String query = textScanner.nextLine();
+//					long queryTime = Long.parseLong(textScanner.nextLine());
+//					queryList.add(new QueryInfo(query, queryTime));
+//				}
+//				textScanner.close();
+//				JOptionPane.showMessagedialog(getAppFrame(), queryList.size());
+//				
+//			}
+//		}
+//		catch(IOException currentError)
+//		{
+//			dataController.displayErrors(currentError);
+//		}
+//	}
 }

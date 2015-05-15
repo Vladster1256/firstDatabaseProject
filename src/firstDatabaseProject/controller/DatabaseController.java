@@ -47,7 +47,7 @@ public class DatabaseController
 	 */
 	public void start()
 	{
-		loadTimingInfo();
+//		loadTimingInfo();
 	}
 
 	/**

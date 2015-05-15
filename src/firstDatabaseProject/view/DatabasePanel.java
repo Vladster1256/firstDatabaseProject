@@ -3,6 +3,7 @@ package firstDatabaseProject.view;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -17,6 +18,8 @@ import javax.swing.SpringLayout;
 import javax.swing.table.DefaultTableModel;
 
 import firstDatabaseProject.controller.DatabaseController;
+import firstDatabaseProject.controller.DatabaseLogicController;
+import firstDatabaseProject.exception.Vlad;
 
 /**
  * this is the panel class for the GUI that we can sea with our i's. (W0W m8,
@@ -33,10 +36,9 @@ public class DatabasePanel extends JPanel
 	private JButton appButton;
 	private JTextArea displayArea;
 	private JTable tableData;
-	private JPasswordField password;
-	private JTextField dateField;
+	private JTextField queryEntry;
 	private TableCellWrapRenderer cellRenderer;
-	private JButton confirmDateButton;
+	public DatabaseLogicController $controller;
 
 	/**
 	 * this is the constructor for the DatabasePanel class
@@ -48,14 +50,15 @@ public class DatabasePanel extends JPanel
 	public DatabasePanel(DatabaseController mainController)
 	{
 		this.mainController = mainController;
+		this.$controller = mainController.getDatabase();
 		appButton = new JButton("Test the query");
 		displayArea = new JTextArea(10, 30);
 		displayPane = new JScrollPane(displayArea);
 		baseLayout = new SpringLayout();
-		password = new JPasswordField(null, 20);
 		cellRenderer = new TableCellWrapRenderer();
-		dateField = new JTextField(null, 20);
-		confirmDateButton = new JButton("Confirm teh Date");
+		queryEntry = new JTextField(null, 20);
+	
+
 
 		setupTable();
 		setupDisplayPane();
@@ -70,7 +73,12 @@ public class DatabasePanel extends JPanel
 	 */
 	private void setupDisplayPane()
 	{
-
+		
+		baseLayout.putConstraint(SpringLayout.WEST, queryEntry, -527, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, queryEntry, -21, SpringLayout.NORTH, appButton);
+		baseLayout.putConstraint(SpringLayout.EAST, queryEntry, -134, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, appButton, -119, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.EAST, appButton, -295, SpringLayout.EAST, this);
 	}
 
 	/**
@@ -83,9 +91,7 @@ public class DatabasePanel extends JPanel
 		this.setSize(800, 800);
 		this.add(appButton);
 		this.add(displayPane);
-		this.add(password);
-		this.add(dateField);
-		this.add(confirmDateButton);
+		this.add(queryEntry);
 		// password.setEchoChar(``);
 		// password.setForeground(Color.RED);
 		// password.setFont(new Font("Serif", Font.BOLD,30));
@@ -96,15 +102,8 @@ public class DatabasePanel extends JPanel
 	 */
 	private void setupLayout()
 	{
-		baseLayout.putConstraint(SpringLayout.NORTH, appButton, 27, SpringLayout.SOUTH, displayPane);
-		baseLayout.putConstraint(SpringLayout.EAST, appButton, -149, SpringLayout.EAST, this);
 		baseLayout.putConstraint(SpringLayout.NORTH, displayPane, 29, SpringLayout.NORTH, this);
 		baseLayout.putConstraint(SpringLayout.EAST, displayPane, -91, SpringLayout.EAST, this);
-		baseLayout.putConstraint(SpringLayout.NORTH, password, 371, SpringLayout.NORTH, this);
-		baseLayout.putConstraint(SpringLayout.EAST, password, -24, SpringLayout.WEST, displayPane);
-		baseLayout.putConstraint(SpringLayout.NORTH, confirmDateButton, 6, SpringLayout.SOUTH, dateField);
-		baseLayout.putConstraint(SpringLayout.WEST, confirmDateButton, 208, SpringLayout.WEST, this);
-		baseLayout.putConstraint(SpringLayout.WEST, dateField, 179, SpringLayout.WEST, this);
 
 	}
 
@@ -118,7 +117,6 @@ public class DatabasePanel extends JPanel
 	{
 		tableData = new JTable(new DefaultTableModel(mainController.getDatabase().tableInfo(), mainController.getDatabase().getMetaData()));
 		displayPane = new JScrollPane(tableData);
-		baseLayout.putConstraint(SpringLayout.NORTH, dateField, 55, SpringLayout.SOUTH, displayPane);
 		for (int spot = 0; spot < tableData.getColumnCount(); spot++)
 		{
 			tableData.getColumnModel().getColumn(spot).setCellRenderer(cellRenderer);
@@ -138,31 +136,24 @@ public class DatabasePanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				int answer = mainController.getDatabase().insertSample();
-				displayArea.setText(displayArea.getText() + "\nRows Affected: " + answer);
-
-			}
-		});
-
-		/**
-		 * This creates the confirm date to prove when date on the query has been created
-		 */
-		confirmDateButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent click)
-			{
+//				int answer = mainController.getDatabase().insertSample();
+//				displayArea.setText(displayArea.getText() + "\nRows Affected: " + answer);
 				try
 				{
-					SimpleDateFormat df = new java.text.SimpleDateFormat("MM/dd/yyyy");
-					 Calendar c = Calendar.getInstance();
-					 c.setTime(df.parse(dateField.getText()));
-				}
-				catch(java.text.ParseException e)
+					$controller.submitQuery(queryEntry.getText());
+					displayPane.revalidate();
+					displayArea.revalidate();
+					setupTable();
+					
+				} catch (Vlad e)
 				{
-					e.printStackTrace();
+					// TODO Auto-generated catch block
+					$controller.displayErrors(e);
 				}
-			}
+				
+				
 
+			}
 		});
 	}
 }
