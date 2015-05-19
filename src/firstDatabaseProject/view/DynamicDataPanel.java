@@ -58,6 +58,10 @@ public class DynamicDataPanel extends JPanel
 		setupListeners();
 	}
 
+	/**
+	 * This is what we use to set up our panel, it takes our names of the tables and aranges them all nifty
+	 * @param table
+	 */
 	private void setupPanel(String table)
 	{
 		this.setLayout(baseLayout);
@@ -95,6 +99,10 @@ public class DynamicDataPanel extends JPanel
 		baseLayout.putConstraint(SpringLayout.SOUTH, submitQueryButton, -50, SpringLayout.SOUTH, this);
 	}
 
+	/**
+	 * This is a dynamic gui feature that gets the values of the columns.
+	 * @return
+	 */
 	private String getValueList()
 	{
 		String values = "";
@@ -115,6 +123,10 @@ public class DynamicDataPanel extends JPanel
 		return values;
 	}
 
+	/**
+	 * This is the method that creates fields for every input offered
+	 * @return
+	 */
 	private String getFieldList()
 	{
 		String fields = "(";

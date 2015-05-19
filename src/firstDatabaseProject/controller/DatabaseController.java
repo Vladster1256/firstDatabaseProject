@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import firstDatabaseProject.exception.Vlad;
 import firstDatabaseProject.model.QueryInfo;
 import firstDatabaseProject.view.DatabaseFrame;
@@ -27,7 +29,7 @@ public class DatabaseController
 	private DatabaseView applicationView;
 	private DatabaseFrame appFrame;
 	private DatabaseLogicController $database;
-	private ArrayList<QueryInfo> timingInfoList;
+	private ArrayList<QueryInfo> queryList;
 
 	/**
 	 * this is the constructor for the DatabaseController class
@@ -70,29 +72,40 @@ public class DatabaseController
 		return $database;
 	}
 
+	
+	/**
+	 * This is the get timing info list array for query info
+	 * @return the timing info list
+	 */
 	public ArrayList<QueryInfo> getTimingInfoList()
 	{
 		return timingInfoList;
 	}
 
+	/**
+	 * We load the previously saved timing info list
+	 */
 	private void loadTimingInfo()
 	{
-		File saveFile = new File("save.txt");
 		try
 		{
+			File loadFile = new File("asdasda.save");
 			Scanner readFileScanner;
-			if (saveFile.exists())
+			if (loadFile.exists())
 			{
-				timingInfoList.clear();
-				readFileScanner = new Scanner(saveFile);
-				while (readFileScanner.hasNext())
+				queryList.clear();
+				Scanner textScanner = new Scanner(loadFile);
+				while(textScanner.hasNext())
 				{
-					String tempQuery = readFileScanner.next();
-					long tempTime = readFileScanner.nextLong();
-					readFileScanner.next();
-					timingInfoList.add(new QueryInfo(tempQuery, tempTime));
+					String query = textScanner.nextLine();
+					long queryTime = Long.parseLong(textScanner.nextLine());
+					queryList.add(new QueryInfo(query,queryTime));
 				}
-				readFileScanner.close();
+				textScanner.close();
+				JOptionPane.showMessageDialog(getAppFrame(),queryList.size() + "Query objects were loaded to the file");
+			}
+			else{
+				JOptionPane.showMessageDialog(getAppFrame(),"file not present. nothing was done");
 			}
 
 		} catch (IOException current)
@@ -108,26 +121,31 @@ public class DatabaseController
 		}
 	}
 
+	
+	/**
+	 * This is the method to save information in the array list that has the timing info list
+	 */
 	public void saveQueryTimingInfo()
 	{
-		File saveFile = new File("save.txt");
+		
 
 		try
 		{
-			Scanner readFileScanner;
-			if (saveFile.exists())
+			File saveFile = new File("asdasda.txt");
+			PrintWriter writer = new PrintWriter(saveFile);
+			if(saveFile.exists())
 			{
-				timingInfoList.clear();
-				readFileScanner = new Scanner(saveFile);
-				while (readFileScanner.hasNext())
+				for(QueryInfo wow: queryList)
 				{
-					String tempQuery = readFileScanner.nextLine();
-					readFileScanner.next();
-					long tempTime = readFileScanner.nextLong();
-
-					timingInfoList.add(new QueryInfo(tempQuery, tempTime));
+					writer.println(wow.getQuery());
+					writer.println(wow.getQueryTime());
 				}
-				readFileScanner.close();
+				writer.close();
+				JOptionPane.showMessageDialog(getAppFrame(), queryList.size() + "QueryInfo objects were saved");
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(getAppFrame(), "File not present. nothing done");
 			}
 
 		} catch (IOException current)

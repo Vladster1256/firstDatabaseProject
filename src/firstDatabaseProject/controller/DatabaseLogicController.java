@@ -15,10 +15,12 @@ import firstDatabaseProject.exception.Vlad;
 import firstDatabaseProject.model.QueryInfo;
 
 /**
+ * 
+ * This is the class that we use to control all of the logic for the entire database project
  * @version 1.0
- * @author VGAR7399 This is the class that we use to control all of the logic
- *         for the entire database project
- */
+ * @author VGAR7399 
+ **/
+ 
 public class DatabaseLogicController
 {
 	private String connectionString;
